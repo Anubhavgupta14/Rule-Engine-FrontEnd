@@ -19,3 +19,21 @@ input:focus{
 .focus\:ring-black:focus {
   --tw-ring-opacity: 0 !important;
 }
+.rule-h{
+  margin-bottom: 20px !important;
+}
+.text{
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid;
+  min-height: 255px;
+}
+.text:focus-visible{
+  outline: 0;
+}
+.btn{
+  height: 50px;
+}
+.pointer-not{
+  cursor: not-allowed;
+}

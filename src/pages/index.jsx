@@ -1,11 +1,56 @@
 import React, { useState } from "react";
 import CreateRule from "../../components/CreateRule";
 import EvaluateRule from "../../components/EvaluateRule";
+import {createRule,evaluateRule} from "../pages/api/Endpoints"
+import toast, { Toaster } from 'react-hot-toast';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState("create");
+  const [ruleInput, setRuleInput] = useState("");
+  const [evaluateInput, setEvaluateInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleEvaluateSubmit = async(e) => {
+    e.preventDefault();
+    try{
+      setIsLoading(true)
+      const parsedInput = JSON.parse(evaluateInput);
+      const res = await evaluateRule({userData:parsedInput})
+      if(res?.eligible){
+        toast.success("Congratulations you are Eligible")
+      }
+      else{
+        toast.error("Sorry but you are not eligible")
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+    finally{
+      setIsLoading(false)
+    }
+  };
+
+  const handleRuleSubmit = async(e) => {
+    e.preventDefault();
+    try{
+      setIsLoading(true)
+      const res = await createRule({rule:ruleInput})
+      if(res?.message){
+        toast.success("Rule successfully created")
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+    finally{
+      setIsLoading(false)
+    }
+  };
 
   return (
+    <>
+    <Toaster />
     <div className="min-h-screen bg-black flex flex-col">
       <header className="w-full py-6 text-center border-b border-gray-800">
         <h1 className="text-3xl font-bold text-white">Rule Engine with AST</h1>
@@ -37,11 +82,28 @@ const App = () => {
               Evaluate
             </button>
           </div>
+
           <div className="p-8">
-            {activeTab === "create" ? <CreateRule /> : <EvaluateRule />}
+            {activeTab === "create" ? (
+              <CreateRule
+                handleRuleSubmit={handleRuleSubmit}
+                ruleInput={ruleInput}
+                setRuleInput={setRuleInput}
+                isLoading={isLoading}
+              />
+            ) : (
+              <EvaluateRule
+                evaluateInput={evaluateInput}
+                setEvaluateInput={setEvaluateInput}
+                handleEvaluateSubmit={handleEvaluateSubmit}
+                isLoading={isLoading}
+              />
+            )}
           </div>
         </div>
       </main>
+
+      {/* Footer */}
       <footer className="w-full py-4 text-center border-t border-gray-800">
         <a
           href="https://www.linkedin.com/in/anubhavgupta14"
@@ -53,6 +115,7 @@ const App = () => {
         </a>
       </footer>
     </div>
+    </>
   );
 };
 
