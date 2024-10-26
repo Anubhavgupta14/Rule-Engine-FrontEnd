@@ -9,12 +9,15 @@ const App = () => {
   const [ruleInput, setRuleInput] = useState("");
   const [evaluateInput, setEvaluateInput] = useState("");
   const [isLoading, setIsLoading] = useState(false)
+  const [jsonError, setJsonError] = useState("");
+  const [ruleError, setRuleError] = useState("");
 
   const handleEvaluateSubmit = async(e) => {
     e.preventDefault();
     try{
       setIsLoading(true)
       const parsedInput = JSON.parse(evaluateInput);
+      setJsonError("")
       const res = await evaluateRule({userData:parsedInput})
       if(res?.eligible){
         toast.success("Congratulations you are Eligible")
@@ -24,6 +27,7 @@ const App = () => {
       }
     }
     catch(err){
+      setJsonError("Invalid JSON. Please try again")
       console.log(err);
     }
     finally{
@@ -35,12 +39,19 @@ const App = () => {
     e.preventDefault();
     try{
       setIsLoading(true)
+      setRuleError("")
       const res = await createRule({rule:ruleInput})
+      console.log(res)
       if(res?.message){
         toast.success("Rule successfully created")
       }
+      else if(res?.error){
+        toast.error(res?.error)
+        setRuleError("Invalid Rule Format. Try again")        
+      }
     }
     catch(err){
+      setRuleError("Invalid Rule")
       console.log(err);
     }
     finally{
@@ -97,6 +108,8 @@ const App = () => {
                 setEvaluateInput={setEvaluateInput}
                 handleEvaluateSubmit={handleEvaluateSubmit}
                 isLoading={isLoading}
+                jsonError={jsonError}
+                setJsonError={setJsonError}
               />
             )}
           </div>

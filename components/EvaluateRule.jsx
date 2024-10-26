@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const EvaluateRule = ({evaluateInput, setEvaluateInput, handleEvaluateSubmit, isLoading}) => {
+const EvaluateRule = ({evaluateInput, setEvaluateInput, handleEvaluateSubmit, isLoading, jsonError, setJsonError}) => {
 
   return (
     <form onSubmit={handleEvaluateSubmit} className="space-y-6">
@@ -11,6 +11,11 @@ const EvaluateRule = ({evaluateInput, setEvaluateInput, handleEvaluateSubmit, is
         >
           Enter JSON
         </div>
+        {jsonError && (
+          <p className="text-red-500 text-sm mt-1">
+            {jsonError}
+          </p>
+        )}
         <textarea
           id="evaluateInput"
           value={evaluateInput}

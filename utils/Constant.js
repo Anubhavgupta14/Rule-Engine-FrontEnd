@@ -10,8 +10,8 @@ export const Const = {
     ServiceUnavailable503: 503,
     GatewayTimeout504: 504,
     Redirect302: 302,
-    //Link: "http://localhost:3001/",
-    Link: process.env.NEXT_PUBLIC_BACKEND_URL,
+    Link: "http://localhost:3001/",
+    //Link: process.env.NEXT_PUBLIC_BACKEND_URL,
   };
   
   export const ProcessAPI = async (res) => {
